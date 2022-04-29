@@ -6,6 +6,13 @@ html {
 
 }
 
+.filterOptions{
+
+    padding-bottom: 1rem ;
+    border-bottom: 1px solid lightgray;
+
+}
+
 .filterOptions ul li {
 
     list-style: none;
@@ -20,6 +27,7 @@ html {
 
     display: flex;
     flex-direction: row;
+    padding-top: 2rem;
 
 }
 
@@ -29,12 +37,28 @@ html {
     width: 500px;
     background-color: #F2F2F2;
     margin: 5px;
-    border-radius: 5px;
+    border-radius: 0.375rem;
     margin-left: 40px;
     margin-bottom: 15px;
     position: relative;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     border: 1px solid #CFD2DC;
+    cursor: pointer;
+
+}
+
+.mainContainer .fullWidth{
+  
+    width: 100% !important;
+    margin-right: 5rem;
+   
+}
+
+.mainContainer .overflow-handling{
+
+    max-height: 40rem;
+    overflow-x: hidden;
+    overflow-y: auto;
 
 }
 
@@ -48,7 +72,6 @@ html {
 
 .emailContainer .emailInfo {
 
-    position: absolute;
     display: flex;
 
 }
@@ -56,10 +79,16 @@ html {
 .emailContainer #icon {
 
     background-color: #E54065;
-    height: 80px;
-    width: 80px;
+    height: 70px;
+    width: 70px;
     border-radius: 50%;
     margin: 10px 2px 2px 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: 400;
+    font-size: 35px;
 
 }
 
@@ -73,6 +102,18 @@ html {
 
 }
 
+.emailContainer .emailInfo .desc{
+
+    line-height: 20px;
+
+}
+
+.emailInfo .icon-wrapper {
+
+    display: inline-block;
+
+}
+
 .emailBody{
 
     width: 1000px;
@@ -81,7 +122,6 @@ html {
     border: 1px solid #CFD2DC;
     border-radius: 10px;
     margin: 10px;
-    display: flex;
        
 }
 
@@ -89,6 +129,9 @@ html {
 
     display: flex;
     color: #636363;
+    margin-top: 40px;
+    margin-left: 20px;
+    display: flex;
 
 }
 
@@ -99,6 +142,12 @@ html {
     width: 60px;
     border-radius: 50%;
     margin: 10px 2px 2px 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: 400;
+    font-size: 35px;
 
 }
 
@@ -108,25 +157,42 @@ html {
         
 }
 
+.leftContent .mar-wrapper .mark-as-favourite{
+
+    background: #E54065;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    color: white;
+    border-radius:0.375rem;
+    padding: 3px;
+    font-weight: 600;
+    margin-top: 25px;
+    cursor: pointer;
+    margin-left: 600px;
+                    
+}
+
+.leftContent .mark-wrapper{
+
+    display: inline-block;
+    
+}
+
 .emailBody .rightContent {
 
     padding:0px 20px 0px 20px;
+    margin-left: 95px;
 
 }
 
-.emailBody .rightContent #datetime {
+.emailBody .rightContent {
    
     font-size: small;
     color: #636363;
-
-}
-    
-.emailBody .rightContent #content {
-   
     text-align: left;
     font-size: 14px;
-    color: #636363;
 
 }
-
 

@@ -1,35 +1,44 @@
 import React from "react"
 import "./style/myStyle.css"
+import axios from "axios";
 
 class App extends React.Component {
 
-  constructor() {
+  constructor(props) {
 
-    super();
+    super(props);
 
-    this.state = { arr: [1, 2, 3, 4, 5, 6, 7] }
+    this.state = { list: [], status: false, selectedContent: null }
+
+    this.getData()
+
+  };
+
+  changeState = (item) => {
+
+    this.setState({ status: true, selectedContent: item }, () => this.getBody());
 
   }
 
-
-  emailContainer(num) {
+  emailContainer = (item, index) => {
 
     return (
 
-      <div className="emailContainer">
+      <div className={`emailContainer ${!this.state.status ? "fullWidth" : ""}`} onClick={() => this.changeState(item)}>
 
         <div className="emailInfo">
-
-          <div id="icon">
-
+          <div className="icon-wrapper">
+            <div id="icon">
+              {item?.from?.name[0].toUpperCase()}
+            </div>
           </div>
 
           <div id="shortDesc">
 
-            <p>From: <strong>Foo Bar foo.bar@gmail.com</strong></p>
-            <p>Subject: <strong>Lorem Ipsum</strong></p>
-            <p>This is in reagrds to the verification of employment</p>
-            <p>26/02/2020 10:30am</p>
+            <p>From: <strong>{item?.from?.email}</strong></p>
+            <p>Subject: <strong>{item?.subject}</strong></p>
+            <p className="desc">{item?.short_description}</p>
+            <p>{new Date(item?.date).toLocaleDateString()}</p>
 
           </div>
 
@@ -40,6 +49,46 @@ class App extends React.Component {
     )
 
   }
+
+  getData = () => {
+
+    axios({
+      method: 'get',
+      url: 'https://flipkart-email-mock.now.sh/',
+    })
+
+      .then((response) => {
+
+
+        if (response && response.data && response.data.list)
+          this.setState({ list: response.data.list })
+      })
+
+      .catch((error) => { console.log(error) })
+
+  }
+
+  getBody = () => {
+
+    axios({
+      method: 'get',
+      url: `https://flipkart-email-mock.now.sh?id=${this.state.selectedContent.id}`,
+    })
+
+      .then((response) => {
+
+        if (response && response.data && response.data.body) {
+
+          this.setState({ bodyContent: response.data.body })
+
+        }
+
+      })
+
+      .catch((error) => { console.log(error) })
+
+  }
+
 
   render() {
 
@@ -52,7 +101,7 @@ class App extends React.Component {
 
             <ul>
 
-              <li>Filter By:</li>
+              <li>FILTER BY :</li>
               <li>Unread</li>
               <li>Read</li>
               <li>Favorites</li>
@@ -62,68 +111,49 @@ class App extends React.Component {
           </div>
 
 
-
           <div className="mainContainer">
 
-            <div>
+            <div className={`${!this.state.status ? "fullWidth" : "overflow-handling"}`}>
 
-              {this.state.arr.map(this.emailContainer)}
+              {this.state.list.map((item, index) => this.emailContainer(item, index))}
 
             </div>
 
-            <div className="emailBody">
+            {this.state.status && this.state.selectedContent ? <div className="emailBody">
 
               <div className="leftContent">
 
-                <p id="icon"></p>
+                <p id="icon">{this.state.selectedContent.from.name[0].toUpperCase()}</p>
+
+                <h3 id="subject">{this.state.selectedContent.subject}</h3>
+
+                <div className="mar-wrapper">
+                  <p className="mark-as-favourite">Mark as favourite</p>
+                </div>
 
               </div>
 
               <div className="rightContent">
 
-                <h3 id="subject">Lorem Ispum</h3>
-
-                <p id="datetime">26/02/2020 10:30am</p>
+                <p id="datetime">{new Date(this.state.selectedContent.date).toLocaleDateString()}</p>
 
                 <p id="content">
 
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, ad voluptate saepe molestiae dicta quo delectus amet. Eaque aspernatur id, eos neque nulla rem, exercitationem, error sit quas unde magnam.
-                  Eos sapiente maxime aliquam, totam voluptate veritatis perferendis, cum vitae sint atque recusandae dolorem repudiandae minus obcaecati doloremque nesciunt aut! Reiciendis ad ducimus ipsam, quisquam rem enim blanditiis amet accusamus.
-                  Quasi odit quidem nostrum fuga dolore saepe laudantium voluptas dicta magni. Obcaecati temporibus quos, odio debitis ducimus animi deserunt alias, eius, aut voluptas eveniet ut unde at delectus ea! Aperiam.
-                  Dolores cum iste nulla eius tenetur totam fuga cumque commodi aperiam, iure atque est assumenda inventore ipsam, repellat magni placeat voluptatum magnam nemo unde tempora quam. Non iste rem pariatur!
-                  Itaque sequi porro quidem deserunt assumenda esse quasi ipsam nisi asperiores dolorem. Iste quod impedit eum aliquam, sunt repellat voluptatem provident, quae ratione officiis voluptates nemo reprehenderit culpa fuga autem?
+                  <span dangerouslySetInnerHTML={{
+                    __html: this.state.bodyContent
+                  }}></span>
 
                 </p>
 
-                <p id="content">
-
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, ad voluptate saepe molestiae dicta quo delectus amet. Eaque aspernatur id, eos neque nulla rem, exercitationem, error sit quas unde magnam.
-                  Eos sapiente maxime aliquam, totam voluptate veritatis perferendis, cum vitae sint atque recusandae dolorem repudiandae minus obcaecati doloremque nesciunt aut! Reiciendis ad ducimus ipsam, quisquam rem enim blanditiis amet accusamus.
-                  Quasi odit quidem nostrum fuga dolore saepe laudantium voluptas dicta magni. Obcaecati temporibus quos, odio debitis ducimus animi deserunt alias, eius, aut voluptas eveniet ut unde at delectus ea! Aperiam.
-                  Dolores cum iste nulla eius tenetur totam fuga cumque commodi aperiam, iure atque est assumenda inventore ipsam, repellat magni placeat voluptatum magnam nemo unde tempora quam. Non iste rem pariatur!
-                  Itaque sequi porro quidem deserunt assumenda esse quasi ipsam nisi asperiores dolorem. Iste quod impedit eum aliquam, sunt repellat voluptatem provident, quae ratione officiis voluptates nemo reprehenderit culpa fuga autem?
-
-                </p>
-
-                <p id="content">
-
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, ad voluptate saepe molestiae dicta quo delectus amet. Eaque aspernatur id, eos neque nulla rem, exercitationem, error sit quas unde magnam.
-                  Eos sapiente maxime aliquam, totam voluptate veritatis perferendis, cum vitae sint atque recusandae dolorem repudiandae minus obcaecati doloremque nesciunt aut! Reiciendis ad ducimus ipsam, quisquam rem enim blanditiis amet accusamus.
-                  Quasi odit quidem nostrum fuga dolore saepe laudantium voluptas dicta magni. Obcaecati temporibus quos, odio debitis ducimus animi deserunt alias, eius, aut voluptas eveniet ut unde at delectus ea! Aperiam.
-                  Dolores cum iste nulla eius tenetur totam fuga cumque commodi aperiam, iure atque est assumenda inventore ipsam, repellat magni placeat voluptatum magnam nemo unde tempora quam. Non iste rem pariatur!
-                  Itaque sequi porro quidem deserunt assumenda esse quasi ipsam nisi asperiores dolorem. Iste quod impedit eum aliquam, sunt repellat voluptatem provident, quae ratione officiis voluptates nemo reprehenderit culpa fuga autem?
-
-                </p>
               </div>
 
-            </div>
+            </div> : null}
 
           </div>
 
         </div>
 
       </>
-
 
     )
   }
